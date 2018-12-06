@@ -15,7 +15,7 @@ public class AoC_4 {
     private static final int MINUTES_PER_HOUR = 60;
 
     public static void main(String... args) throws IOException {
-        final Map<Integer, List<SleepPeriod>> sleepById = Files.lines(Paths.get("input4.txt")).sorted().collect(Collectors.toList()).stream()
+        final Map<Integer, List<SleepPeriod>> sleepById = Files.lines(Paths.get("input4.txt")).sorted()
                 .map(GuardChange::fromInput)
                 .collect(ArrayList::new, new SleepCollector()::accumulator, List::addAll).stream()
                 .collect(Collectors.groupingBy(SleepPeriod::getId));

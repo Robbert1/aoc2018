@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class RAoC_1_2 {
 
     public static void main(String... args) throws IOException {
-
         final List<Integer> deltas = Files.lines(Paths.get("input1.txt"))
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
@@ -27,17 +26,10 @@ public class RAoC_1_2 {
     }
 
     private static int firstRepeatedFrequency(final List<Integer> deltas) {
-        // back-pressured so no while(true) needed
-        final Flux<List<Integer>> repeatingDeltas = Flux.generate(() -> null, (s, sink) -> {
-            sink.next(deltas);
-            return s;
-        });
-
         final AtomicInteger currentFrequency = new AtomicInteger(0);
         final Set<Integer> frequencies = new HashSet<>(2000);
-
-        return repeatingDeltas
-                .flatMap(values -> Flux.fromStream(values.stream()))
+        return Flux.fromIterable(deltas)
+                .repeat() // back-pressured so no while(true) needed
                 .map(currentFrequency::addAndGet)
                 .takeUntil(frequency -> !frequencies.add(frequency))
                 .blockLast();
