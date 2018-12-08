@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -18,7 +19,9 @@ public class AoC_6 {
         //44667 needs -Xss5m to work ;)
         final List<String> input = Files.lines(Paths.get("input6.txt")).collect(Collectors.toList());
         out.println(largestArea(input));
+        final long start = System.currentTimeMillis();
         out.println(largestCommonArea(input));
+        System.out.println(System.currentTimeMillis() - start);
     }
 
     private static int largestCommonArea(final List<String> input) {
@@ -31,6 +34,16 @@ public class AoC_6 {
                 .forEach(xPos -> IntStream.range(0, maxY)
                         .forEach(yPos -> IntStream.range(0, coords.size())
                                 .forEach(i -> totalDistances[xPos][yPos] += coords.get(i).manhattanDistance(xPos, yPos))));
+
+        //simpler solution based on the fact that there can be only one shared region
+        /*
+        AtomicInteger counter = new AtomicInteger();
+        IntStream.range(0, maxX)
+                .forEach(xPos -> IntStream.range(0, maxY)
+                        .filter(yPos -> totalDistances[xPos][yPos] < THRESHOLD)
+                        .forEach(yPos -> counter.incrementAndGet()));
+        return counter.get();
+        */
 
         final int[][] counted = new int[maxX][maxY];
         return IntStream.range(0, maxX)
