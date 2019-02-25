@@ -17,6 +17,8 @@ public class AoC_9 {
     public static void main(String... args) throws IOException {
         // 388844
         // 3212081616
+
+        //TODO: rewrite to rotating ArrayDeque impl
         Files.lines(Paths.get("input9.txt")).map(MarbleGame::fromInput).map(AoC_9::highscore).forEach(System.out::println);
     }
 
